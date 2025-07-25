@@ -99,9 +99,9 @@ function Home() {
               to="/artisan/produits" 
               className="group inline-flex items-center bg-gradient-to-r from-emerald-600 to-teal-600 text-white px-8 py-4 rounded-2xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 font-semibold"
             >
-              <svg className="w-5 h-5 mr-2 group-hover:rotate-12 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-              </svg>
+                             <svg className="w-4 h-4 mr-2 group-hover:rotate-12 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+               </svg>
               Gérer mes produits
             </Link>
           </div>
@@ -110,12 +110,12 @@ function Home() {
         {/* Section des filtres améliorée */}
         <div className="mb-12 animate-slide-in-from-bottom">
           <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl p-8 border border-white/20">
-            <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center flex items-center justify-center">
-              <svg className="w-6 h-6 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
-              </svg>
-              Filtrer les produits
-            </h2>
+                         <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center flex items-center justify-center">
+               <svg className="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+               </svg>
+               Filtrer les produits
+             </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
               <div className="relative group">
                 <input
@@ -126,11 +126,11 @@ function Home() {
                   onChange={handleFiltreChange}
                   className="w-full p-4 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:ring-4 focus:ring-blue-200 transition-all duration-300 bg-white/70 backdrop-blur-sm group-hover:shadow-md"
                 />
-                <div className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
-                  <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                  </svg>
-                </div>
+                                 <div className="absolute inset-y-0 right-0 flex items-center pr-4 pointer-events-none">
+                   <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                   </svg>
+                 </div>
               </div>
               
               <select
@@ -175,14 +175,14 @@ function Home() {
               />
               
               <div className="flex items-center justify-center bg-white/70 backdrop-blur-sm rounded-xl border-2 border-gray-200 p-4 hover:shadow-md transition-all duration-300">
-                <input
-                  type="checkbox"
-                  name="populaire"
-                  id="populaire"
-                  checked={filtres.populaire}
-                  onChange={handleFiltreChange}
-                  className="w-5 h-5 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2 mr-3"
-                />
+                                 <input
+                   type="checkbox"
+                   name="populaire"
+                   id="populaire"
+                   checked={filtres.populaire}
+                   onChange={handleFiltreChange}
+                   className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2 mr-3"
+                 />
                 <label htmlFor="populaire" className="text-sm font-medium text-gray-700 cursor-pointer">
                   Les plus populaires
                 </label>
@@ -201,12 +201,12 @@ function Home() {
           </div>
         ) : error ? (
           <div className="text-center py-20">
-            <div className="bg-red-50 border border-red-200 rounded-2xl p-8 max-w-md mx-auto">
-              <svg className="w-16 h-16 text-red-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <p className="text-red-600 text-lg font-semibold">{error}</p>
-            </div>
+                         <div className="bg-red-50 border border-red-200 rounded-2xl p-8 max-w-md mx-auto">
+               <svg className="w-12 h-12 text-red-500 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+               </svg>
+               <p className="text-red-600 text-lg font-semibold">{error}</p>
+             </div>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
@@ -218,17 +218,17 @@ function Home() {
                   style={{ animationDelay: `${index * 100}ms` }}
                 >
                   <div className="relative overflow-hidden">
-                    <img
-                      src={produit.images && produit.images[0] ? produit.images[0] : "https://via.placeholder.com/400x300?text=Produit+Artisanal"}
-                      alt={produit.nom || "Produit"}
-                      className="w-full h-64 object-cover group-hover:scale-110 transition-transform duration-700"
-                    />
+                                         <img
+                       src={produit.images && produit.images[0] ? produit.images[0] : "https://via.placeholder.com/400x300?text=Produit+Artisanal"}
+                       alt={produit.nom || "Produit"}
+                       className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-700"
+                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                    <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm rounded-full p-2 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-4 group-hover:translate-x-0">
-                      <svg className="w-5 h-5 text-red-500" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                      </svg>
-                    </div>
+                                         <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm rounded-full p-2 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-4 group-hover:translate-x-0">
+                       <svg className="w-4 h-4 text-red-500" fill="currentColor" viewBox="0 0 24 24">
+                         <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                       </svg>
+                     </div>
                   </div>
                   
                   <div className="p-6">
@@ -240,17 +240,17 @@ function Home() {
                     </p>
                     
                     <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center space-x-1">
-                        {[...Array(5)].map((_, i) => (
-                          <svg 
-                            key={i}
-                            className={`w-5 h-5 ${i < Math.round(produit.note || 0) ? 'text-yellow-400' : 'text-gray-300'} transition-colors duration-300`}
-                            fill="currentColor" 
-                            viewBox="0 0 24 24"
-                          >
-                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
-                          </svg>
-                        ))}
+                                             <div className="flex items-center space-x-1">
+                         {[...Array(5)].map((_, i) => (
+                           <svg 
+                             key={i}
+                             className={`w-4 h-4 ${i < Math.round(produit.note || 0) ? 'text-yellow-400' : 'text-gray-300'} transition-colors duration-300`}
+                             fill="currentColor" 
+                             viewBox="0 0 24 24"
+                           >
+                             <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                           </svg>
+                         ))}
                         <span className="text-sm text-gray-600 ml-2">({produit.note?.toFixed(1) || '0.0'})</span>
                       </div>
                     </div>
@@ -273,15 +273,15 @@ function Home() {
                 </div>
               ))
             ) : (
-              <div className="col-span-full text-center py-20">
-                <div className="bg-gray-50 rounded-3xl p-12 max-w-md mx-auto">
-                  <svg className="w-20 h-20 text-gray-400 mx-auto mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
-                  </svg>
-                  <h3 className="text-xl font-semibold text-gray-600 mb-2">Aucun produit trouvé</h3>
-                  <p className="text-gray-500">Essayez de modifier vos filtres de recherche</p>
-                </div>
-              </div>
+                             <div className="col-span-full text-center py-20">
+                 <div className="bg-gray-50 rounded-3xl p-12 max-w-md mx-auto">
+                   <svg className="w-16 h-16 text-gray-400 mx-auto mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+                   </svg>
+                   <h3 className="text-xl font-semibold text-gray-600 mb-2">Aucun produit trouvé</h3>
+                   <p className="text-gray-500">Essayez de modifier vos filtres de recherche</p>
+                 </div>
+               </div>
             )}
           </div>
         )}
