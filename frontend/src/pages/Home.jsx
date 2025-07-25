@@ -18,6 +18,8 @@ function Home() {
     populaire: false
   });
   const [categories, setCategories] = useState([]);
+  const [showFilters, setShowFilters] = useState(true);
+  const [sortBy, setSortBy] = useState('');
   const { user } = React.useContext(AuthContext);
 
   useEffect(() => {
@@ -46,7 +48,27 @@ function Home() {
         if (filtres.populaire) params.append('populaire', filtres.populaire);
 
         const res = await axios.get(`http://localhost:5000/api/produits?${params.toString()}`);
-        setProduits(Array.isArray(res.data.produits) ? res.data.produits : []);
+        let produitsData = Array.isArray(res.data.produits) ? res.data.produits : [];
+        
+        // Tri des produits
+        if (sortBy) {
+          produitsData = produitsData.sort((a, b) => {
+            switch (sortBy) {
+              case 'prix-asc':
+                return (a.prix || 0) - (b.prix || 0);
+              case 'prix-desc':
+                return (b.prix || 0) - (a.prix || 0);
+              case 'note-desc':
+                return (b.note || 0) - (a.note || 0);
+              case 'nom-asc':
+                return (a.nom || '').localeCompare(b.nom || '');
+              default:
+                return 0;
+            }
+          });
+        }
+        
+        setProduits(produitsData);
         setLoading(false);
       } catch (err) {
         setError("Erreur de chargement des produits");
@@ -56,7 +78,7 @@ function Home() {
     };
 
     fetchProduits();
-  }, [filtres]);
+  }, [filtres, sortBy]);
 
   const handleFiltreChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -107,16 +129,30 @@ function Home() {
           </div>
         )}
 
-        {/* Section des filtres améliorée */}
+                {/* Section des filtres améliorée */}
         <div className="mb-12 animate-slide-in-from-bottom">
-          <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl p-8 border border-white/20">
-                         <h2 className="text-2xl font-bold text-gray-800 mb-6 text-center flex items-center justify-center">
-               <svg className="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
-               </svg>
-               Filtrer les produits
-             </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
+          <div className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl border border-white/20 overflow-hidden">
+            <div 
+              className="p-6 cursor-pointer hover:bg-white/10 transition-colors duration-300"
+              onClick={() => setShowFilters(!showFilters)}
+            >
+              <h2 className="text-2xl font-bold text-gray-800 text-center flex items-center justify-center">
+                <svg className="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                </svg>
+                Filtrer les produits
+                <svg 
+                  className={`w-5 h-5 ml-3 transition-transform duration-300 ${showFilters ? 'rotate-180' : ''}`} 
+                  fill="none" 
+                  stroke="currentColor" 
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </h2>
+                         </div>
+             <div className={`transition-all duration-500 ease-in-out ${showFilters ? 'max-h-96 opacity-100 p-8' : 'max-h-0 opacity-0 p-0'} overflow-hidden`}>
+               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
               <div className="relative group">
                 <input
                   type="text"
@@ -186,8 +222,48 @@ function Home() {
                 <label htmlFor="populaire" className="text-sm font-medium text-gray-700 cursor-pointer">
                   Les plus populaires
                 </label>
-              </div>
-            </div>
+                             </div>
+             </div>
+           </div>
+                   </div>
+          </div>
+
+        {/* Barre de tri et statistiques */}
+        <div className="flex flex-col sm:flex-row justify-between items-center mb-8 gap-4">
+          <div className="flex items-center space-x-4">
+            <span className="text-gray-600 font-medium">
+              {produits.length} produit{produits.length > 1 ? 's' : ''} trouvé{produits.length > 1 ? 's' : ''}
+            </span>
+            {Object.values(filtres).some(val => val !== '' && val !== false) && (
+              <button
+                onClick={() => setFiltres({
+                  search: '',
+                  categorie: '',
+                  prixMin: '',
+                  prixMax: '',
+                  noteMin: '',
+                  populaire: false
+                })}
+                className="text-sm text-blue-600 hover:text-blue-800 underline transition-colors duration-300"
+              >
+                Effacer les filtres
+              </button>
+            )}
+          </div>
+          
+          <div className="flex items-center space-x-3">
+            <span className="text-gray-600 font-medium">Trier par:</span>
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value)}
+              className="px-4 py-2 border-2 border-gray-200 rounded-xl focus:border-blue-500 focus:ring-4 focus:ring-blue-200 transition-all duration-300 bg-white/70 backdrop-blur-sm hover:shadow-md"
+            >
+              <option value="">Ordre par défaut</option>
+              <option value="prix-asc">Prix croissant</option>
+              <option value="prix-desc">Prix décroissant</option>
+              <option value="note-desc">Meilleures notes</option>
+              <option value="nom-asc">Nom A-Z</option>
+            </select>
           </div>
         </div>
 
@@ -217,19 +293,37 @@ function Home() {
                   className={`group bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden border border-gray-100 hover:border-blue-200 transform hover:-translate-y-2 animate-fade-in-up`}
                   style={{ animationDelay: `${index * 100}ms` }}
                 >
-                  <div className="relative overflow-hidden">
-                                         <img
+                                     <div className="relative overflow-hidden">
+                     <img
                        src={produit.images && produit.images[0] ? produit.images[0] : "https://via.placeholder.com/400x300?text=Produit+Artisanal"}
                        alt={produit.nom || "Produit"}
                        className="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-700"
                      />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                                         <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm rounded-full p-2 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-4 group-hover:translate-x-0">
+                     <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                     
+                     {/* Badge populaire */}
+                     {produit.note >= 4.5 && (
+                       <div className="absolute top-4 left-4 bg-gradient-to-r from-yellow-400 to-orange-400 text-white px-3 py-1 rounded-full text-xs font-bold flex items-center shadow-lg">
+                         <svg className="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 24 24">
+                           <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                         </svg>
+                         POPULAIRE
+                       </div>
+                     )}
+                     
+                     {/* Badge nouveau (si créé récemment) */}
+                     {new Date(produit.dateCreation || produit.createdAt) > new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) && (
+                       <div className="absolute top-4 left-4 bg-gradient-to-r from-green-400 to-emerald-400 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
+                         NOUVEAU
+                       </div>
+                     )}
+                     
+                     <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm rounded-full p-2 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-4 group-hover:translate-x-0">
                        <svg className="w-4 h-4 text-red-500" fill="currentColor" viewBox="0 0 24 24">
                          <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
                        </svg>
                      </div>
-                  </div>
+                   </div>
                   
                   <div className="p-6">
                     <h2 className="text-xl font-bold text-gray-800 mb-2 group-hover:text-blue-600 transition-colors duration-300">
@@ -255,20 +349,27 @@ function Home() {
                       </div>
                     </div>
                     
-                    <div className="flex items-center justify-between">
-                      <span className="text-2xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
-                        {produit.prix !== undefined ? produit.prix + " €" : "Prix sur demande"}
-                      </span>
-                      <Link
-                        to={`/produit/${produit._id || produit.id}`}
-                        className="group/btn bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-3 rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center space-x-2"
-                      >
-                        <span className="font-semibold">Voir détail</span>
-                        <svg className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                        </svg>
-                      </Link>
-                    </div>
+                                         <div className="flex items-center justify-between">
+                       <div className="flex flex-col">
+                         <span className="text-2xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
+                           {produit.prix !== undefined ? produit.prix + " €" : "Prix sur demande"}
+                         </span>
+                         {produit.prixOriginal && produit.prixOriginal > produit.prix && (
+                           <span className="text-sm text-gray-500 line-through">
+                             {produit.prixOriginal} €
+                           </span>
+                         )}
+                       </div>
+                       <Link
+                         to={`/produit/${produit._id || produit.id}`}
+                         className="group/btn bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-3 rounded-xl hover:from-blue-700 hover:to-indigo-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center space-x-2"
+                       >
+                         <span className="font-semibold">Voir détail</span>
+                         <svg className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                         </svg>
+                       </Link>
+                     </div>
                   </div>
                 </div>
               ))
