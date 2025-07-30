@@ -1,0 +1,205 @@
+.sign-container {
+  min-height: 100vh;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  z-index: 1;
+}
+
+.sign-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+  opacity: 0.8;
+}
+
+.sign-content {
+  display: flex;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  overflow: hidden;
+  width: 100%;
+  max-width: 1000px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  z-index: 2;
+}
+
+.sign-form-container {
+  flex: 1;
+  padding: 3rem;
+}
+
+.sign-header {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 0.75rem;
+  border: none;
+  background: none;
+  color: #666;
+  font-weight: 500;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.3s;
+}
+
+.tab-btn.active {
+  color: #000;
+  border-bottom-color: #3b82f6;
+}
+
+.social-auth {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.social-auth button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.social-auth button:hover {
+  background: #f9fafb;
+}
+
+.social-auth img {
+  width: 24px;
+  height: 24px;
+}
+
+.divider {
+  position: relative;
+  text-align: center;
+  margin: 2rem 0;
+}
+
+.divider::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 100%;
+  height: 1px;
+  background: #e5e7eb;
+}
+
+.divider span {
+  position: relative;
+ background: rgba(249, 249, 249, 0.95);
+  padding: 0 1rem;
+  color: #666;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.form-input::placeholder {
+  color: #9ca3af;
+  opacity: 1;
+}
+
+.form-input:focus::placeholder {
+  opacity: 0.7;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 0.75rem;
+  background: #3b82f6;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.submit-btn:hover {
+  background: #2563eb;
+}
+
+.submit-btn:disabled {
+  background: #93c5fd;
+  cursor: not-allowed;
+}
+
+.switch-mode {
+  text-align: center;
+  margin-top: 1.5rem;
+  color: #666;
+}
+
+.switch-mode span {
+  color: #3b82f6;
+  cursor: pointer;
+}
+
+.sign-image {
+  flex: 1;
+  background: #f3f4f6;
+}
+
+.sign-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.error-message {
+  color: #dc2626;
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  background-color: #fee2e2;
+  border-radius: 0.375rem;
+  text-align: center;
+}
+
+@media (max-width: 768px) {
+  .sign-content {
+    flex-direction: column;
+  }
+
+  .sign-image {
+    display: none;
+  }
+
+  .sign-form-container {
+    padding: 2rem;
+  }
+}

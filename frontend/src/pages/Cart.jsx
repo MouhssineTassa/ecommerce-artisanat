@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom"; // Importer Link
+import { Link } from "react-router-dom";
+import '../styles/Cart.css';  // Ajout de l'import CSS
 
 function Cart() {
   const [panier, setPanier] = useState([]);
@@ -70,7 +71,7 @@ function Cart() {
           {panier.map((item) => (
             <div
               key={item._id}
-              className="flex items-center justify-between bg-white p-4 rounded-xl shadow"
+              className="cart-item"
             >
               <div className="flex items-center gap-4">
                 <img
@@ -80,17 +81,22 @@ function Cart() {
                 />
                 <div>
                   <h2 className="text-lg font-semibold">{item.nom}</h2>
-                  <p className="text-sm text-gray-600">Quantité : {item.quantite}</p>
-                  <p className="font-bold text-green-700">
-                    Total : {(item.prix * item.quantite).toFixed(2)} €
-                  </p>
-                  <p className="text-green-700 font-bold">{item.prix} €</p>
+                  <div className="flex items-center gap-4 mt-2">
+                    <div className="quantity-controls flex items-center gap-2">
+                      <button className="quantity-btn">-</button>
+                      <span className="quantity-value">{item.quantite}</span>
+                      <button className="quantity-btn">+</button>
+                    </div>
+                    <p className="cart-price">
+                      Total : {(item.prix * item.quantite).toFixed(2)} €
+                    </p>
+                  </div>
                 </div>
               </div>
 
               <button
                 onClick={() => retirerProduit(item._id)}
-                className="text-red-600 hover:underline"
+                className="remove-btn"
               >
                 Retirer
               </button>
@@ -99,11 +105,11 @@ function Cart() {
 
           <div className="text-right mt-8">
             <p className="text-xl font-bold">
-              Total général : <span className="text-green-700">{totalGeneral.toFixed(2)} €</span>
+              Total général : <span className="cart-price">{totalGeneral.toFixed(2)} €</span>
             </p>
             <Link
               to="/checkout"
-              className="mt-4 inline-block bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700"
+              className="mt-4 inline-block bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 checkout-btn"
             >
               Valider la commande
             </Link>
@@ -114,4 +120,4 @@ function Cart() {
   );
 }
 
-export default Cart; 
+export default Cart;

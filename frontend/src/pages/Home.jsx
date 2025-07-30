@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import { AuthContext } from "../contexts/AuthContext";
+import '../styles/Home.css';
 
 function Home() {
   const [produits, setProduits] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // États pour les filtres
   const [filtres, setFiltres] = useState({
     search: '',
     categorie: '',
@@ -21,7 +21,6 @@ function Home() {
   const { user } = React.useContext(AuthContext);
 
   useEffect(() => {
-    // Charger les catégories pour le filtre
     const fetchCategories = async () => {
       try {
         const res = await axios.get("http://localhost:5000/api/categories");
@@ -67,32 +66,48 @@ function Home() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-6 text-center">Produits artisanaux de menuiserie</h1>
-      {user?.role === 'artisan' && (
-        <div className="mb-6 text-center">
-          <Link to="/artisan/produits" className="inline-block bg-green-700 text-white px-6 py-2 rounded shadow hover:bg-green-800 transition">
-            Gérer mes produits
-          </Link>
+    <div className="container mx-auto px-4 py-6">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl sm:text-3xl font-bold text-center">
+          Produits artisanaux de menuiserie
+        </h1>
+        
+        {/* Affichage conditionnel des liens selon le rôle */}
+        <div className="flex items-center gap-4">
+          {user?.role === 'artisan' ? (
+            <Link 
+              to="/artisan/produits" 
+              className="inline-block bg-green-700 text-white px-6 py-2 rounded hover:bg-green-800 transition"
+            >
+              Gérer mes produits
+            </Link>
+          ) : (
+            <Link 
+              to="/panier" 
+              className="flex items-center gap-2 bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition"
+            >
+              <span>🛒</span>
+              <span>Mon Panier</span>
+            </Link>
+          )}
         </div>
-      )}
+      </div>
 
-      {/* Section des filtres */}
-      <div className="mb-8 p-4 bg-gray-100 rounded-lg">
-        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4">
+      <div className="bg-gray-100 p-4 rounded-lg mb-6">
+        <div className="flex flex-col md:flex-row md:flex-wrap gap-4">
           <input
             type="text"
             name="search"
             placeholder="Rechercher par nom..."
             value={filtres.search}
             onChange={handleFiltreChange}
-            className="p-2 border rounded"
+            className="flex-1 p-2 border rounded"
           />
           <select
             name="categorie"
             value={filtres.categorie}
             onChange={handleFiltreChange}
-            className="p-2 border rounded"
+            className="flex-1 p-2 border rounded"
           >
             <option value="">Toutes les catégories</option>
             {categories.map(cat => (
@@ -105,7 +120,7 @@ function Home() {
             placeholder="Prix min"
             value={filtres.prixMin}
             onChange={handleFiltreChange}
-            className="p-2 border rounded"
+            className="flex-1 p-2 border rounded"
           />
           <input
             type="number"
@@ -113,7 +128,7 @@ function Home() {
             placeholder="Prix max"
             value={filtres.prixMax}
             onChange={handleFiltreChange}
-            className="p-2 border rounded"
+            className="flex-1 p-2 border rounded"
           />
           <input
             type="number"
@@ -123,53 +138,53 @@ function Home() {
             max="5"
             value={filtres.noteMin}
             onChange={handleFiltreChange}
-            className="p-2 border rounded"
+            className="flex-1 p-2 border rounded"
           />
-          <div className="flex items-center">
+          <label className="flex items-center space-x-2">
             <input
               type="checkbox"
               name="populaire"
-              id="populaire"
               checked={filtres.populaire}
               onChange={handleFiltreChange}
-              className="mr-2"
             />
-            <label htmlFor="populaire">Les plus populaires</label>
-          </div>
+            <span>Les plus populaires</span>
+          </label>
         </div>
       </div>
 
       {loading ? (
-        <p className="text-center">Chargement des produits...</p>
+        <p className="text-center loading-spinner">Chargement des produits...</p>
       ) : error ? (
         <p className="text-center text-red-600">{error}</p>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {produits.length > 0 ? (
             produits.map((produit) => (
-              <div key={produit._id || produit.id} className="bg-white rounded-2xl shadow p-4 hover:shadow-lg transition">
+              <div key={produit._id || produit.id} className="bg-white rounded-xl shadow-md p-4 flex flex-col product-card">
                 <img
-                  src={produit.images && produit.images[0] ? produit.images[0] : "https://via.placeholder.com/300x200"}
-                  alt={produit.nom || "Produit"}
-                  className="w-full h-48 object-cover rounded-xl"
+                  src={produit.images?.[0] || "https://via.placeholder.com/300x200"}
+                  alt={produit.nom}
+                  className="w-full h-48 object-cover rounded-lg product-image"
                 />
-                <h2 className="text-xl font-semibold mt-4">{produit.nom || "Sans nom"}</h2>
-                <p className="text-gray-600 mt-1">{produit.description ? produit.description.substring(0, 60) + "..." : "Pas de description"}</p>
-                <p className="text-green-600 font-bold mt-2">{produit.prix !== undefined ? produit.prix + " €" : ""}</p>
-                <div className="flex items-center mt-2">
-                  <span className="text-yellow-500">{'★'.repeat(Math.round(produit.note))}{'☆'.repeat(5 - Math.round(produit.note))}</span>
-                  <span className="text-gray-600 ml-2">({produit.note?.toFixed(1)})</span>
+                <h2 className="text-lg font-semibold mt-3">{produit.nom}</h2>
+                <p className="text-gray-600 text-sm mt-1">{produit.description?.substring(0, 60)}...</p>
+                <p className="text-green-700 font-bold mt-2 product-price">{produit.prix} €</p>
+                <div className="flex items-center mt-2 text-sm">
+                  <span className="text-yellow-500 product-rating">
+                    {'★'.repeat(Math.round(produit.note))}{'☆'.repeat(5 - Math.round(produit.note))}
+                  </span>
+                  <span className="ml-2 text-gray-600">({produit.note?.toFixed(1)})</span>
                 </div>
                 <Link
-                  to={`/produit/${produit._id || produit.id}`}
-                  className="inline-block mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                  to={`/produit/${produit._id}`}
+                  className="mt-auto inline-block bg-blue-600 text-white text-center px-4 py-2 rounded hover:bg-blue-700 transition mt-4 product-button"
                 >
                   Voir détail
                 </Link>
               </div>
             ))
           ) : (
-            <p className="text-center col-span-full">Aucun produit ne correspond à votre recherche.</p>
+            <p className="col-span-full text-center">Aucun produit trouvé.</p>
           )}
         </div>
       )}
@@ -177,4 +192,4 @@ function Home() {
   );
 }
 
-export default Home; 
+export default Home;

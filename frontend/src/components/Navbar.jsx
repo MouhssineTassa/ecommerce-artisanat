@@ -1,16 +1,18 @@
-import React, { useContext } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { AuthContext } from "../contexts/AuthContext";
-import { useTranslation } from "react-i18next";
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { AuthContext } from '../contexts/AuthContext';
+import { useTranslation } from 'react-i18next';
+import '../styles/Navbar.css';
 
 function Navbar() {
-  const { user, logout } = useContext(AuthContext);
-  const navigate = useNavigate();
+  const [showSearch, setShowSearch] = useState(false);
+  const { user, logout } = React.useContext(AuthContext);
   const { t, i18n } = useTranslation();
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     logout();
-    navigate("/");
+    navigate('/');
   };
 
   const handleLangChange = (e) => {
@@ -18,68 +20,97 @@ function Navbar() {
   };
 
   return (
-    <nav className="bg-white shadow-md py-4 px-6 flex justify-between items-center sticky top-0 z-50">
-      {/* Logo / Titre */}
-      <Link to="/" className="text-2xl font-bold text-green-800">
-        MenuisierArt
-      </Link>
-      {/* Liens de navigation */}
-      <div className="space-x-4 flex items-center">
-        <Link to="/" className="text-gray-700 hover:text-green-700 font-medium">
-          Accueil
-        </Link>
-        <Link to="/panier" className="text-gray-700 hover:text-green-700 font-medium">
-          Panier 🛒
-        </Link>
+    <>
+      <nav className="navbar-fixed bg-white shadow-md py-4">
+        <div className="navbar-container flex items-center justify-between">
+          {/* Logo - Left */}
+          <Link to="/" className="nav-logo flex-shrink-0">
+            🌳 MenuisierArt
+          </Link>
 
-        {user?.role === 'artisan' && (
-          <>
-            <Link to="/artisan/dashboard" className="text-gray-700 hover:text-green-700 font-medium">{t('dashboard')}</Link>
-            <Link to="/dashboard-artisan" className="text-gray-700 hover:text-green-700 font-medium">Espace Artisan</Link>
-            <Link to="/artisan/commandes" className="text-gray-700 hover:text-green-700 font-medium">{t('orders')}</Link>
-            <Link to="/artisan/categories" className="text-gray-700 hover:text-green-700 font-medium">{t('categories')}</Link>
-            <Link to="/artisan/utilisateurs" className="text-gray-700 hover:text-green-700 font-medium">{t('users')}</Link>
-          </>
-        )}
+          {user ? (
+            // Navigation complète pour utilisateur connecté
+            <>
+              <div className="nav-center flex items-center space-x-8">
+                <Link to="/" className="nav-link">Accueil</Link>
+                <Link to="/categories" className="nav-link">Catégories</Link>
+                <Link to="/about" className="nav-link">À propos</Link>
+                <Link to="/contact" className="nav-link">Contact</Link>
+                <button 
+                  onClick={() => setShowSearch(!showSearch)}
+                  className="nav-search-button"
+                >
+                  🔍
+                </button>
+              </div>
 
-        {user ? (
-          <>
-            <Link to="/profil" className="text-gray-700 hover:text-green-700 font-medium flex items-center gap-2">
-              <span className="inline-flex items-center justify-center w-8 h-8 bg-green-200 text-green-800 rounded-full font-bold">
-                {user.nom ? user.nom.charAt(0).toUpperCase() : <span>👤</span>}
-              </span>
-              Profil
-            </Link>
-            <button
-              onClick={handleLogout}
-              className="text-gray-700 hover:text-red-600 font-medium ml-2"
-            >
-              {t('logout')}
-            </button>
-          </>
-        ) : (
-          <>
-            <Link to="/login" className="text-gray-700 hover:text-green-700 font-medium">
-              Connexion
-            </Link>
-            <Link to="/signup" className="text-gray-700 hover:text-green-700 font-medium">
-              S'inscrire
-            </Link>
-          </>
+              <div className="nav-right">
+                {user.role === 'artisan' && (
+                  <Link to="/artisan/dashboard" className="nav-link mr-4">
+                    Espace Artisan
+                  </Link>
+                )}
+                <Link to="/profil" className="nav-link flex items-center gap-2">
+                  <span className="nav-avatar">
+                    {user.nom ? user.nom.charAt(0).toUpperCase() : '👤'}
+                  </span>
+                  <span>Profil</span>
+                </Link>
+                <button onClick={handleLogout} className="nav-button ml-4">
+                  Déconnexion
+                </button>
+              </div>
+            </>
+          ) : (
+            // Navigation simplifiée pour visiteur
+            <>
+              <div className="nav-center flex items-center space-x-8">
+                <Link to="/" className="nav-link">Accueil</Link>
+                <Link to="/categories" className="nav-link">Catégories</Link>
+                <Link to="/about" className="nav-link">À propos</Link>
+                <Link to="/contact" className="nav-link">Contact</Link>
+                <button 
+                  onClick={() => setShowSearch(!showSearch)}
+                  className="nav-search-button"
+                >
+                  🔍
+                </button>
+              </div>
+
+              <div className="nav-right">
+                <Link to="/login" className="nav-link-login">
+                  Se connecter
+                </Link>
+                <Link to="/signup" className="nav-button-primary">
+                  Créer un compte
+                </Link>
+              </div>
+            </>
+          )}
+        </div>
+
+        {/* Search Panel */}
+        {showSearch && (
+          <div className="search-panel show">
+            <div className="search-container">
+              <input
+                type="text"
+                placeholder="Rechercher..."
+                className="search-input"
+              />
+              <button 
+                onClick={() => setShowSearch(false)}
+                className="search-close"
+              >
+                ✕
+              </button>
+            </div>
+          </div>
         )}
-        {/* Sélecteur de langue */}
-        <select
-          value={i18n.language}
-          onChange={handleLangChange}
-          className="ml-4 border rounded px-2 py-1 text-sm bg-white"
-        >
-          <option value="fr">FR</option>
-          <option value="en">EN</option>
-          <option value="ar">AR</option>
-        </select>
-      </div>
-    </nav>
+      </nav>
+      <div className="h-16"></div>
+    </>
   );
 }
 
-export default Navbar; 
+export default Navbar;

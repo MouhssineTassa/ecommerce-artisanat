@@ -21,6 +21,7 @@ import ArtisanAvis from './pages/ArtisanAvis';
 import CommandesArtisan from './pages/CommandesArtisan';
 import ArtisanCategories from './pages/ArtisanCategories';
 import ArtisanUtilisateurs from './pages/ArtisanUtilisateurs';
+import Contact from './pages/Contact';
 
 function App() {
   return (
@@ -130,6 +131,7 @@ function App() {
                 </PrivateRoute>
               }
             />
+            <Route path="/contact" element={<Contact />} />
           </Routes>
         </Router>
       </PanierProvider>
@@ -137,4 +139,4 @@ function App() {
   );
 }
 
-export default App; 
+export default App;
